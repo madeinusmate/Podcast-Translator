@@ -6,15 +6,16 @@ from google.cloud import texttospeech
 import html
 
 os.environ[
-    'GOOGLE_APPLICATION_CREDENTIALS'] = "/Users/stefano/Library/google-cloud-sdk/Podcast Translator-f4426a9e08bb.json"
+    'GOOGLE_APPLICATION_CREDENTIALS'] = "<<ADD YOUR PROJECT CREDENTIALS>>"
+GCS_file_path="gs://podcast_audio_files/"
 source_file_names=["Business_Wars", "Motley_Fool", "Pomp"]
-
+source_file_format=".wav"
 for file_name in source_file_names:
 
     #Call speech-to-text-API
     client = speech.SpeechClient()
 
-    audio = speech.RecognitionAudio(uri="gs://podcast_audio_files/" + file_name + ".wav")
+    audio = speech.RecognitionAudio(uri= GCS_file_path + file_name + source_file_format)
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.FLAC,
         language_code="en-US",
@@ -22,7 +23,7 @@ for file_name in source_file_names:
         audio_channel_count = 2,
     )
 
-    print("Initiating Podcast Translator for " + file_name + ".wav")
+    print("Initiating Podcast Translator for " + file_name + source_file_format)
 
     operation = client.long_running_recognize(config=config, audio=audio)
 
